@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34622.214
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH-LDM_PIIService", "GH-LDM_PIIService.csproj", "{B2E4E7FA-2C7F-4C8D-9329-C132558A820D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH-LDM_PIIService.DAL", "..\GH-LDM_PIIService.DAL\GH-LDM_PIIService.DAL.csproj", "{06251E66-6389-4C83-B6B5-C41CDD417FBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH-LDM_PIIService.DSL", "..\GH-LDM_PIIService.DSL\GH-LDM_PIIService.DSL.csproj", "{6E81EF14-06E7-4E5D-9C4A-A7F5F7B4C2F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH-LDM_PIIService.Entities", "..\GH-LDM_PIIService.Entities\GH-LDM_PIIService.Entities.csproj", "{31858353-5891-4F01-91B5-E5EF1365A613}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GH-LDM_PIIService.Helpers", "..\GH-LDM_PIIService.Helpers\GH-LDM_PIIService.Helpers.csproj", "{5723F326-E626-47BB-BB6D-17AAF1103DC8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B2E4E7FA-2C7F-4C8D-9329-C132558A820D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2E4E7FA-2C7F-4C8D-9329-C132558A820D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2E4E7FA-2C7F-4C8D-9329-C132558A820D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2E4E7FA-2C7F-4C8D-9329-C132558A820D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06251E66-6389-4C83-B6B5-C41CDD417FBE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06251E66-6389-4C83-B6B5-C41CDD417FBE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06251E66-6389-4C83-B6B5-C41CDD417FBE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06251E66-6389-4C83-B6B5-C41CDD417FBE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E81EF14-06E7-4E5D-9C4A-A7F5F7B4C2F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E81EF14-06E7-4E5D-9C4A-A7F5F7B4C2F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E81EF14-06E7-4E5D-9C4A-A7F5F7B4C2F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E81EF14-06E7-4E5D-9C4A-A7F5F7B4C2F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31858353-5891-4F01-91B5-E5EF1365A613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31858353-5891-4F01-91B5-E5EF1365A613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31858353-5891-4F01-91B5-E5EF1365A613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31858353-5891-4F01-91B5-E5EF1365A613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5723F326-E626-47BB-BB6D-17AAF1103DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5723F326-E626-47BB-BB6D-17AAF1103DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5723F326-E626-47BB-BB6D-17AAF1103DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5723F326-E626-47BB-BB6D-17AAF1103DC8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C002DF34-BA40-479A-A52D-C554D8869062}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,11 @@
+﻿{
+  "profiles": {
+    "GH_LDM_PIIService": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
