@@ -24,11 +24,7 @@ namespace GH_LDM_PIIService.Helpers
         public static File_Logger GetInstance(string? subFolderLogName = null)
         {
 
-            if (string.IsNullOrWhiteSpace(subFolderLogName))
-            {
-                subFolderLogName = "General";
-            }
-
+          
             lock (_loggerDictionary)
             {
                 var file_logger = _loggerDictionary.FirstOrDefault(x => x.Key.Trim().ToLower() == subFolderLogName.Trim().ToLower()).Value;
@@ -113,6 +109,7 @@ namespace GH_LDM_PIIService.Helpers
     {
         Information = 1,
         Action = 2,
-        Exception = 3
+        Exception = 3,
+        Error = 4
     }
 }

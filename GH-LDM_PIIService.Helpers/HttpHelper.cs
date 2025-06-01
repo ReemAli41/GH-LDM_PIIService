@@ -34,9 +34,9 @@ namespace GH_LDM_PIIService.Helpers
         private static readonly File_Logger _logger = File_Logger.GetInstance("HttpHelper");
 
         public static async Task<TResponse> PostJsonAsync<TRequest, TResponse>(
-            string url,
-            TRequest body,
-            string bearerToken = null)
+    string url,
+    TRequest body,
+    string bearerToken = null)
         {
             try
             {
@@ -52,14 +52,31 @@ namespace GH_LDM_PIIService.Helpers
                 _logger.WriteToLogFile(ActionTypeEnum.Information, $"Sending POST JSON to {url}.");
 
                 var response = await _httpClient.SendAsync(request);
+                int statusCode = (int)response.StatusCode;
 
-                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received response with status code {response.StatusCode} from {url}.");
-                response.EnsureSuccessStatusCode();
+                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received response with status code {statusCode} from {url}.");
 
-                var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
-                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Deserialized response successfully.");
+                if (statusCode >= 200 && statusCode < 400)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        _logger.WriteToLogFile(ActionTypeEnum.Information, "Strict 200 OK response received.");
+                    }
+                    else
+                    {
+                        _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received successful but non-200 status code: {statusCode} ({response.ReasonPhrase})");
+                    }
 
-                return result;
+                    var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
+                    _logger.WriteToLogFile(ActionTypeEnum.Information, $"Deserialized response successfully.");
+                    return result;
+                }
+                else
+                {
+                    string error = await response.Content.ReadAsStringAsync();
+                    _logger.WriteToLogFile(ActionTypeEnum.Error, $"Request to {url} failed with status {statusCode}: {error}");
+                    throw new HttpRequestException($"HTTP Error {statusCode}: {response.ReasonPhrase}");
+                }
             }
             catch (Exception ex)
             {
@@ -69,11 +86,11 @@ namespace GH_LDM_PIIService.Helpers
         }
 
         public static async Task<TResponse> PostFormUrlEncodedAsync<TRequest, TResponse>(
-            string url,
-            TRequest body,
-            string clientId,
-            string clientSecret)
-            where TRequest : class
+    string url,
+    TRequest body,
+    string clientId,
+    string clientSecret)
+    where TRequest : class
         {
             try
             {
@@ -91,13 +108,31 @@ namespace GH_LDM_PIIService.Helpers
                 _logger.WriteToLogFile(ActionTypeEnum.Information, $"Sending form-url-encoded POST to {url}.");
 
                 var response = await _httpClient.SendAsync(request);
-                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received response with status code {response.StatusCode} from {url}.");
-                response.EnsureSuccessStatusCode();
+                int statusCode = (int)response.StatusCode;
 
-                var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
-                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Form-url-encoded response deserialized successfully.");
+                _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received response with status code {statusCode} from {url}.");
 
-                return result;
+                if (statusCode >= 200 && statusCode < 400)
+                {
+                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        _logger.WriteToLogFile(ActionTypeEnum.Information, "Strict 200 OK response received.");
+                    }
+                    else
+                    {
+                        _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received successful but non-200 status code: {statusCode} ({response.ReasonPhrase})");
+                    }
+
+                    var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
+                    _logger.WriteToLogFile(ActionTypeEnum.Information, $"Form-url-encoded response deserialized successfully.");
+                    return result;
+                }
+                else
+                {
+                    string error = await response.Content.ReadAsStringAsync();
+                    _logger.WriteToLogFile(ActionTypeEnum.Error, $"Form-url-encoded POST to {url} failed with status {statusCode}: {error}");
+                    throw new HttpRequestException($"HTTP Error {statusCode}: {response.ReasonPhrase}");
+                }
             }
             catch (Exception ex)
             {
@@ -105,6 +140,7 @@ namespace GH_LDM_PIIService.Helpers
                 throw;
             }
         }
+
     }
 }
 
