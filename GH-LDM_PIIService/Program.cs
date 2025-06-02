@@ -5,7 +5,7 @@ using GH_LDM_PIIService.Helpers;
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
-        string logPath = hostContext.Configuration.GetValue<string>("LogPath");
+        string logPath = hostContext.Configuration.GetValue<string>("Logging:LogPath");
         File_Logger.GetLogFilePath_Event += () => logPath;
 
         services.AddSingleton<UpdatePdfDSL>();

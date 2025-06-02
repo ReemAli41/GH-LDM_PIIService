@@ -15,7 +15,7 @@ namespace GH_LDM_PIIService.Helpers
     {
         private readonly HttpClient _httpClient;
         private readonly ConfigManager _config;
-        private readonly File_Logger _logger = File_Logger.GetInstance("HttpHelper");
+        private readonly File_Logger _logger;
 
         private readonly JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions
         {
@@ -28,6 +28,7 @@ namespace GH_LDM_PIIService.Helpers
         public HttpHelper(ConfigManager config)
         {
             _config = config ?? throw new ArgumentNullException(nameof(config));
+            _logger = File_Logger.GetInstance("HttpHelper");
 
             _httpClient = new HttpClient(new SocketsHttpHandler
             {
