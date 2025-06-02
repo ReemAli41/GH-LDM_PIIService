@@ -41,7 +41,10 @@ namespace GH_LDM_PIIService.DSL
                     }
 
                     //Get Auth Token
+                    Logger.WriteToLogFile(ActionTypeEnum.Information, "Requesting auth token");
                     var tokenResponse = await _httpHelper.PostFormUrlEncodedAsync();
+                    Logger.WriteToLogFile(ActionTypeEnum.Information, "Auth token received");
+
 
                     //Send To PDF Service
                     var pdfResponse = await _httpHelper.PostJsonAsync(request, tokenResponse.AccessToken);

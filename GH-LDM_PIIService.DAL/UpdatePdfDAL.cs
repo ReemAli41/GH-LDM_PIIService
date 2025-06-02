@@ -33,8 +33,9 @@ namespace GH_LDM_PIIService.DAL
             cmd.Parameters.Add(seqOut);
 
             cmd.ExecuteNonQuery();
+            string json = (jsonOut.Value is OracleClob clob) ? clob.Value : null;
 
-            string json = ((OracleClob)jsonOut.Value).Value;
+            //string json = ((OracleClob)jsonOut.Value).Value;
             int seq = Convert.ToInt32(seqOut.Value);
 
             return (json, seq);
