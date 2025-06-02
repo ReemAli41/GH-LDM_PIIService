@@ -11,4 +11,8 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GH-LDM_PIIService.Entities\GH-LDM_PIIService.Entities.csproj" />
+  </ItemGroup>
+
 </Project>

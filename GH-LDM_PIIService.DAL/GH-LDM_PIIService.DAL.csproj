@@ -7,4 +7,17 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GH-LDM_PIIService.Helpers\GH-LDM_PIIService.Helpers.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="NT.Integration.SharedKernel.OracleManagedHelper">
+      <HintPath>..\..\..\NTECH_Libraries\SharedKernelLibraries\NT.Integration.SharedKernel.OracleManagedHelper.dll</HintPath>
+    </Reference>
+    <Reference Include="Oracle.ManagedDataAccess">
+      <HintPath>..\..\..\NTECH_Libraries\SharedKernelLibraries\Oracle.ManagedDataAccess.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

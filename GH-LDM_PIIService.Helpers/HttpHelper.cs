@@ -1,29 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
 using System.Threading.Tasks;
+using GH_LDM_PIIService.Entities.Request;
+using GH_LDM_PIIService.Entities.Response;
 
 namespace GH_LDM_PIIService.Helpers
 {
-    public static class HttpHelper
+    public class HttpHelper
     {
-        private static readonly HttpClient _httpClient = new HttpClient(new SocketsHttpHandler
-        {
-            UseCookies = false,
-            ConnectTimeout = TimeSpan.FromMinutes(5),
-            PooledConnectionLifetime = TimeSpan.FromMinutes(5),
-        })
-        {
-            Timeout = TimeSpan.FromMinutes(5)
-        };
+        private readonly HttpClient _httpClient;
+        private readonly ConfigManager _config;
+        private readonly File_Logger _logger = File_Logger.GetInstance("HttpHelper");
 
-        private static readonly JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions
+        private readonly JsonSerializerOptions _defaultJsonOptions = new JsonSerializerOptions
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
@@ -31,13 +25,27 @@ namespace GH_LDM_PIIService.Helpers
             PropertyNameCaseInsensitive = true
         };
 
-        private static readonly File_Logger _logger = File_Logger.GetInstance("HttpHelper");
-
-        public static async Task<TResponse> PostJsonAsync<TRequest, TResponse>(
-    string url,
-    TRequest body,
-    string bearerToken = null)
+        public HttpHelper(ConfigManager config)
         {
+            _config = config ?? throw new ArgumentNullException(nameof(config));
+
+            _httpClient = new HttpClient(new SocketsHttpHandler
+            {
+                UseCookies = false,
+                ConnectTimeout = TimeSpan.FromMinutes(5),
+                PooledConnectionLifetime = TimeSpan.FromMinutes(5),
+            })
+            {
+                Timeout = TimeSpan.FromMinutes(5)
+            };
+        }
+
+        public async Task<PdfUpdateResponseDto> PostJsonAsync(
+            PdfUpdateRequestDto body,
+            string bearerToken = null)
+        {
+            string url = _config.PdfEndpoint ?? throw new InvalidOperationException("PdfEndpoint is not configured.");
+
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, url);
@@ -58,16 +66,7 @@ namespace GH_LDM_PIIService.Helpers
 
                 if (statusCode >= 200 && statusCode < 400)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        _logger.WriteToLogFile(ActionTypeEnum.Information, "Strict 200 OK response received.");
-                    }
-                    else
-                    {
-                        _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received successful but non-200 status code: {statusCode} ({response.ReasonPhrase})");
-                    }
-
-                    var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
+                    var result = await response.Content.ReadFromJsonAsync<PdfUpdateResponseDto>(_defaultJsonOptions);
                     _logger.WriteToLogFile(ActionTypeEnum.Information, $"Deserialized response successfully.");
                     return result;
                 }
@@ -85,23 +84,20 @@ namespace GH_LDM_PIIService.Helpers
             }
         }
 
-        public static async Task<TResponse> PostFormUrlEncodedAsync<TRequest, TResponse>(
-    string url,
-    TRequest body,
-    string clientId,
-    string clientSecret)
-    where TRequest : class
+        public async Task<AuthResponseDto> PostFormUrlEncodedAsync()
         {
+            string url = _config.AuthEndpoint ?? throw new InvalidOperationException("AuthEndpoint is not configured.");
+
             try
             {
                 var request = new HttpRequestMessage(HttpMethod.Post, url);
 
                 var formData = new Dictionary<string, string>
                 {
-                    ["grant_type"] = "client_credentials",
-                    ["client_id"] = clientId,
-                    ["client_secret"] = clientSecret,
-                    ["client_authentication_method"] = "client_secret_post"
+                    ["grant_type"] = _config.GrantType,
+                    ["client_id"] = _config.ClientId,
+                    ["client_secret"] = _config.ClientSecret,
+                    ["client_authentication_method"] = _config.ClientAuthenticationMethod
                 };
 
                 request.Content = new FormUrlEncodedContent(formData);
@@ -114,16 +110,7 @@ namespace GH_LDM_PIIService.Helpers
 
                 if (statusCode >= 200 && statusCode < 400)
                 {
-                    if (response.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        _logger.WriteToLogFile(ActionTypeEnum.Information, "Strict 200 OK response received.");
-                    }
-                    else
-                    {
-                        _logger.WriteToLogFile(ActionTypeEnum.Information, $"Received successful but non-200 status code: {statusCode} ({response.ReasonPhrase})");
-                    }
-
-                    var result = await response.Content.ReadFromJsonAsync<TResponse>(_defaultJsonOptions);
+                    var result = await response.Content.ReadFromJsonAsync<AuthResponseDto>(_defaultJsonOptions);
                     _logger.WriteToLogFile(ActionTypeEnum.Information, $"Form-url-encoded response deserialized successfully.");
                     return result;
                 }
@@ -140,7 +127,5 @@ namespace GH_LDM_PIIService.Helpers
                 throw;
             }
         }
-
     }
 }
-

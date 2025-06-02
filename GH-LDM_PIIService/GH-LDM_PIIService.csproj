@@ -14,6 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GH-LDM_PIIService.DSL\GH-LDM_PIIService.DSL.csproj" />
     <ProjectReference Include="..\GH-LDM_PIIService.Helpers\GH-LDM_PIIService.Helpers.csproj" />
   </ItemGroup>
 </Project>

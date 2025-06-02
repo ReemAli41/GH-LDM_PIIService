@@ -1,9 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GH_LDM_PIIService.Entities.Request;
 
 namespace GH_LDM_PIIService.Helpers
 {
@@ -14,15 +11,19 @@ namespace GH_LDM_PIIService.Helpers
 
         public ConfigManager(IConfiguration configuration)
         {
-            _configuration = configuration;
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
 
             try
             {
-                LogPath = GetValue<string>("LogPath");
-                ConnectionString = GetValue<string>("ConnectionString", isEncrypted: true);
-                ClientId = GetValue<string>("ClientId");
-                ClientSecret = GetValue<string>("ClientSecret");
-                AuthEndpoint = GetValue<string>("AuthEndpoint");
+                LogPath = GetValue<string>("Logging:LogPath");
+                ConnectionString = GetValue<string>("ConnectionString", isEncrypted: false);
+
+                ClientId = GetValue<string>("AuthService:ClientId");
+                ClientSecret = GetValue<string>("AuthService:ClientSecret");
+                AuthEndpoint = GetValue<string>("AuthService:Endpoint");
+                GrantType = GetValue<string>("AuthService:GrantType");
+                ClientAuthenticationMethod = GetValue<string>("AuthService:ClientAuthenticationMethod");
+
                 PdfEndpoint = GetValue<string>("PdfEndpoint");
                 IntervalMinutes = GetValue<int>("IntervalMinutes");
 
@@ -40,8 +41,21 @@ namespace GH_LDM_PIIService.Helpers
         public string ClientId { get; }
         public string ClientSecret { get; }
         public string AuthEndpoint { get; }
+        public string GrantType { get; }
+        public string ClientAuthenticationMethod { get; }
         public string PdfEndpoint { get; }
         public int IntervalMinutes { get; }
+
+        public AuthRequestDto GetAuthRequestDto()
+        {
+            return new AuthRequestDto
+            {
+                GrantType = this.GrantType,
+                ClientId = this.ClientId,
+                ClientSecret = this.ClientSecret,
+                ClientAuthenticationMethod = this.ClientAuthenticationMethod
+            };
+        }
 
         private T GetValue<T>(string key, bool isEncrypted = false)
         {
